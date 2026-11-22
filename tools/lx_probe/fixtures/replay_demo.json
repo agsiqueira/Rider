@@ -1,0 +1,57 @@
+[
+  {
+    "elapsed_seconds": 0,
+    "synthetic": true,
+    "status": "decoded",
+    "identity_matches_candidate": true,
+    "protocol_closed": true,
+    "wake_up_line": "off"
+  },
+  {
+    "elapsed_seconds": 5,
+    "synthetic": true,
+    "status": "decoded",
+    "identity_matches_candidate": true,
+    "protocol_closed": true,
+    "wake_up_line": "off"
+  },
+  {
+    "elapsed_seconds": 10,
+    "synthetic": true,
+    "status": "decoded",
+    "identity_matches_candidate": true,
+    "protocol_closed": true,
+    "wake_up_line": "on"
+  },
+  {
+    "elapsed_seconds": 15,
+    "synthetic": true,
+    "status": "decoded",
+    "identity_matches_candidate": true,
+    "protocol_closed": true,
+    "wake_up_line": "on"
+  },
+  {
+    "elapsed_seconds": 20,
+    "synthetic": true,
+    "status": "adapter_error",
+    "adapter_error": "can_error",
+    "wake_up_line": "unknown"
+  },
+  {
+    "elapsed_seconds": 25,
+    "synthetic": true,
+    "status": "decoded",
+    "identity_matches_candidate": true,
+    "protocol_closed": true,
+    "wake_up_line": "on"
+  },
+  {
+    "elapsed_seconds": 30,
+    "synthetic": true,
+    "status": "decoded",
+    "identity_matches_candidate": true,
+    "protocol_closed": true,
+    "wake_up_line": "on"
+  }
+]

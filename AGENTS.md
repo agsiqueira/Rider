@@ -4,7 +4,7 @@
 
 RIDER **is** the motorcycle, not a generic assistant. Use a calm first-person machine voice, and clearly distinguish observation from inference. Focus on proactive contextual intelligence, longitudinal memory, maintenance diagnostics, meaningful reminders, voice, and deliberate controls. **Never add navigation cues** or design RIDER as a live instrument cluster.
 
-The detachable XTEINK X4 Pro UI is monochrome, 800×480 landscape, and must favor large glove-friendly controls. Garage, Voice, Bike Status, and Memories may be initial placeholders; never imply a placeholder works. The Samsung S24 Ultra will eventually handle richer intelligence and BLE bridging. EPMR remains a separate app.
+The detachable XTEINK X4 Pro UI is monochrome, with 800×480 landscape and a verified 480×800 portrait prototype, and must favor large glove-friendly controls. Use Garage and Memories for Parked Home. Use the physical Home button to initiate voice and listen automatically after a RIDER question. Label simulated and placeholder behavior accurately. The Samsung S24 Ultra will eventually handle richer intelligence and BLE bridging. EPMR remains a separate app.
 
 ## Confirmed SolarOS environment
 
@@ -27,24 +27,24 @@ finally:
     gfx.end()
 ```
 
-- `session create files display0` successfully launched Files on the physical display while Telnet stayed connected. `session create python display0 /apps/rider.py` is **not yet tested**; check supported launch semantics.
+- `session create files display0` successfully launched Files on the physical display while Telnet stayed connected. `session create python display0 /rider/rider_ble_two_way.py` was verified from PuTTY over Telnet. The portrait artwork rendered and Go delivered `CONFIRM` to nRF Connect. A direct Python launch in the port shell drew the artwork but did not record the Go tap. Use the dedicated display session for touch testing.
 - `setterm brightness 30` and `display mode display0 refresh=partial` were persisted in `/.shell/startup` and verified after reboot. In auto mode the screen flashed roughly every 30 seconds; partial mode stopped it.
 - `shutdown` cleanly powers off.
 - MicroPython REPL exits with Ctrl+]. Do not assume standard CPython libraries, `input()`, or `execfile()`.
 
 ## Reference topics on the device
 
-`man python`, `man python.gfx`, `man python.input`, `man python.system`, `man sessions.apps`, `man command.display`.
+`man python`, `man python.gfx`, `man python.input`, `man python.system`, `man session`, `man command.display`.
 
 Verify text drawing, shape APIs, and input event signatures before implementing. Use `gfx.end()` in a `finally` block. Prefer event-driven redraws, not busy repaint loops.
 
-## Engineering
+## Codex’s role
 
-1. Build a minimal screen with a mockable graphics interface and local tests.
-2. Establish a Windows-friendly deployment workflow. Verify file-transfer capabilities before automating them.
-3. Test direct Python script launch from storage, then a dedicated foreground display session.
-4. Document each tested command and limitation.
-5. Use incremental pull requests and hardware-test checklists.
+- Use the [development roadmap](docs/development-roadmap.md) to select the current milestone and its exit criteria. Preserve the verified BLE baseline and use the Figma screens as the interface reference.
+- Implement in small, reviewable changes. Codex owns code, local checks, simulations, and deployment instructions. Alex operates the bike, X4 Pro, phone, headset, and garage and reports physical results.
+- Develop against simulated key-on and a simulated opener until the corresponding hardware checks are ready. Keep Phase 1 diagnostics read-only. Confirm uncertain SolarOS APIs using the on-device manuals.
+- Report what passed locally, what used simulated inputs, and what Alex verified on hardware. Include repeatable hardware steps and expected results in each relevant pull request.
+- Use PuTTY for remote SolarOS commands and WinSCP for file transfer. Ask Alex for the specific command output or device observation when needed.
 
 ## Security and safety
 

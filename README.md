@@ -24,6 +24,8 @@ SolarOS **4.17.10 Full** on X4 Pro ESP32-S3 (8 MB PSRAM, 16 MB flash). The onboa
 
 See [docs/HARDWARE.md](docs/HARDWARE.md) for details and [AGENTS.md](AGENTS.md) for Codex guidance.
 
-## First milestone
+## Development roadmap
 
-Implement a minimal standalone SolarOS MicroPython RIDER home screen and a safe, repeatable Windows edit/deploy/test workflow. Confirm undocumented API signatures against the on-device manual before using them. No firmware flashing required.
+The first complete journey is the garage departure. Start by verifying a reliable key-on signal through the OBDLink LX. Use simulated key-on events to develop the Android and X4 Pro interaction in parallel.
+
+See the [development roadmap](docs/development-roadmap.md) for all six phases, the verified baseline, and the exit criteria.

@@ -58,9 +58,13 @@ def monitor(sample, emit, samples=12, interval=5, clock=time.monotonic, sleep=ti
             return "confirmed_on_transition"
         if test_mode != "off-on" and stop_on_off and state["ignition"] == "off":
             return "confirmed_off"
+        # A pending-only exchange may leave a late response in flight. Do not
+        # send a new diagnostic request and risk attributing it to another read.
+        if result.get("status") == "pending":
+            return "response_pending_unresolved"
         # No automatic writes after an incomplete prompt or failed protocol closure.
         if (result.get("status") == "stopped" or (result.get("protocol_closed") is False and result.get("status") != "transport_error")
-                or result.get("status") in ("identity_unconfirmed", "invalid_response", "invalid_value")):
+                or result.get("status") in ("identity_unconfirmed", "ambiguous_response", "invalid_response", "invalid_value")):
             return "review_required"
         if result.get("status") == "decoded":
             failures = 0
@@ -100,6 +104,10 @@ def format_status(item):
     line = observation.get("wake_up_line", "unknown")
     if observation.get("status") == "decoded" and line in ("on", "off"):
         return prefix + line.upper() + " detected (1/2). Keep the key " + line.upper() + "."
+    if observation.get("status") == "pending":
+        return prefix + "Response still pending; ending session without another read."
+    if observation.get("status") == "ambiguous_response":
+        return prefix + "Multiple replies received; state unknown. Review required."
     error = observation.get("adapter_error") or observation.get("error") or observation.get("status")
     if error:
         return prefix + "State unknown. " + str(error)
@@ -157,7 +165,7 @@ def main():
         with SerialSampler(lambda: serial.Serial(args.port, args.baud, timeout=0.1, write_timeout=2)) as sample:
             reason = monitor(sample, emit, args.samples, args.interval, stop_on_off=not args.continue_after_off, test_mode=args.test)
         emit({"monitor_stopped": reason})
-        return 0 if reason != "review_required" else 1
+        return 0 if reason not in ("review_required", "response_pending_unresolved") else 1
     except KeyboardInterrupt:
         emit({"monitor_stopped": "operator_interrupt"})
         return 130

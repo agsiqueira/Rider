@@ -1,11 +1,21 @@
-# Windows LX test update (v6)
+# Windows LX test update (v7)
 
 The basic read path has now passed the manual on/off/on and idle/reconnect tests
 on your bike. See [the live validation record](../../docs/LX_LIVE_VALIDATION.md).
 The new foreground monitor and transition inference have **local tests only**.
 The older first-test instructions below remain available for new hosts.
 
-## Next live test: off to on
+## v7 delayed-response handling
+
+Both attended transition directions have now passed on the tested bike.
+No new bike test is requested for this update. Pending-only identity replies
+are shown as pending and end with response_pending_unresolved, not an identity
+mismatch. Duplicate final replies are ambiguous_response and require review.
+The monitor sends no subsequent diagnostic read in either case. Keep the saved
+log if either status occurs; do not repeatedly rerun to force a confirmation.
+Pending-then-final replies within one complete adapter exchange remain accepted.
+
+## Off-to-on test reference
 
 1. Extract v6 into a fresh folder and open PowerShell in its Rider folder.
 2. Close MotoScan. Keep the bike parked and the engine off.

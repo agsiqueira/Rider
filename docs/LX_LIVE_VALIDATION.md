@@ -48,3 +48,22 @@ hardware run. Starting already on cannot pass; a change across a missing-data
 interval cannot pass. Sleep state, wake effects, power draw, engine cranking,
 long-term reliability, Android behavior, and background operation remain
 unverified. There are no garage, voice, or external actions attached to events.
+
+## Off-to-on validation and delayed replies
+
+A later user-supplied log confirmed off with two reads, then on with two reads,
+emitted exactly one ignition_on and stopped with confirmed_on_transition. Both
+attended transition directions are now demonstrated on the tested bike. The
+successful off-to-on run also accepted pending-then-final identity data.
+Earlier attempts exposed a pending-only identity reply and duplicate identical
+identity replies. These do not establish an identity mismatch or their timing
+cause. Original logs remain outside this repository.
+
+v7 distinguishes pending from identity_unconfirmed and tags the diagnostic
+stage. A pending-only exchange ends the monitoring session without another ECU
+request: a delayed final reply may still arrive and cannot safely be attributed
+to a new transaction. Multiple final replies, including identical identity
+replies, are ambiguous_response and likewise stop monitoring. A bounded valid
+pending-then-final sequence remains supported. No retry or deduplication is used
+to manufacture a state confirmation. These changes have synthetic regression
+tests only; no additional bike test is required now.

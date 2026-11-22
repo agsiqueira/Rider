@@ -16,6 +16,10 @@ ALLOWED = frozenset(SETUP + ("STI", "ATPC", IDENT_FRAME, WAKE_FRAME))
 EXPECTED_ID = bytes.fromhex("62 F1 50 0F 88 00")
 
 
+class AmbiguousResponse(ValueError):
+    pass
+
+
 class AdapterError(ValueError):
     def __init__(self, message):
         super().__init__(message)
@@ -61,7 +65,7 @@ def parse_single_frame(lines):
     payloads = [_parse_frame(line) for line in lines]
     pending = bytes.fromhex("7F 22 78")
     if any(payload != pending for payload in payloads[:-1]):
-        raise ValueError("Conflicting responses: only response-pending may precede a final reply")
+        raise AmbiguousResponse("Multiple final replies or a reply after a terminal response; attribution is ambiguous")
     return payloads[-1]
 
 
@@ -95,14 +99,22 @@ def run(port, label):
             configured = True
             if exchange(port, command, log) != ["OK"]:
                 raise ValueError("Adapter setup failed at " + command)
+        result["stage"] = "identity"
         ident = parse_single_frame(exchange(port, IDENT_FRAME, log))
         result["ident_response_uds"] = ident.hex(" ").upper()
+        if ident == bytes.fromhex("7F 22 78"):
+            result["status"] = "pending"
+            return result
         if ident != EXPECTED_ID:
             result["status"] = "identity_unconfirmed"
             return result
         result["identity_matches_candidate"] = True
+        result["stage"] = "wake_up_line"
         payload = parse_single_frame(exchange(port, WAKE_FRAME, log))
         result.update(decode(payload))
+        return result
+    except AmbiguousResponse as exc:
+        result.update(status="ambiguous_response", error=str(exc))
         return result
     except AdapterError as exc:
         result.update(status="adapter_error", adapter_error=exc.code, error=str(exc))

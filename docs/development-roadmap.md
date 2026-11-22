@@ -6,7 +6,7 @@ The first complete journey is leaving home on the 2014 BMW R1200RT. While the mo
 
 - The X4 Pro and S24 Ultra exchanged BLE writes and notifications using nRF Connect. The image-based portrait prototype displayed Parked Action, and its Go tap reached the phone as `CONFIRM` when launched with `session create python display0 /rider/rider_ble_two_way.py`.
 - The existing phone-to-ESP32 garage command was tested. A command acknowledgment establishes receipt. Door position requires a separate observation or sensor.
-- MotoScan communicated with the motorcycle through the OBDLink LX. A reliable pre-start ignition signal in RIDER remains to be verified.
+- On the 2014 R1200RT (K52), Alex confirmed in MotoScan via OBDLink LX that KOMBI Live Data → Wake-up line follows an `off → on → off` ignition cycle with the engine stopped. The Bosch BMS-X also returned live temperatures with ignition on. KOMBI is the primary key-on candidate. Direct read-only access from RIDER on Android and one event per cycle remain to be verified.
 
 ## Phases and exit criteria
 
@@ -19,4 +19,4 @@ The first complete journey is leaving home on the 2014 BMW R1200RT. While the mo
 | 5. Verify daily use | Test with the phone locked, the display waking, the headset reconnecting, and the bike starting to move. Transition to the Figma Presence screen when riding. | The routine works without PuTTY, WinSCP, or nRF Connect. Connection loss and retries do not repeat an opener command. |
 | 6. Extend to maintenance and memory | Add the six-month tire reminder and phone photo checklist, then connect Memories to saved rides and observations. | RIDER can ask about a due check, handle Start check and Later, and record the completion date. |
 
-Phase 1 is the immediate hardware check. Phase 2 can proceed against simulated input while that evidence is collected.
+Phase 1 now moves from the confirmed MotoScan observation to a direct Android read-only probe. Check fresh KOMBI readings across repeated key cycles and treat a timeout or disconnect as unknown. Phase 2 can proceed against simulated input while that evidence is collected.

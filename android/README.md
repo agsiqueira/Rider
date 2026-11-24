@@ -7,8 +7,11 @@ Windows/S24 setup; its dependencies and theme should be preserved.
 
 - bootstrap: paired-device selection and LX identity/voltage check. User-tested
   on the S24/LX; the app reported a verified adapter and disconnection.
-- step2: adds a single read-only KOMBI identity/wake-up-line check. Pure Kotlin
-  tests pass; Android diagnostic hardware validation remains pending.
+- step2: single read-only KOMBI identity/wake-up-line check. The user verified
+  both on and off values on the S24/LX, including identity and protocol closure.
+- step3: bounded attended transition tests, state confirmation, foreground
+  cancellation and shareable local logs. Local Kotlin/JVM checks pass; the new
+  Android monitor and sharing integration still require device validation.
 - tests: standalone synthetic Kotlin protocol checks; no Android runtime needed.
 
 Each overlay has INSTALL.md and app/src/main files to merge into the existing
